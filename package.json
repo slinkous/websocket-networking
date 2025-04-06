@@ -6,6 +6,6 @@
   "author": "Shawn Biddle <shawncplus@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "ws": "^3.3.3"
+    "ws": "^8.18.1"
   }
 }
