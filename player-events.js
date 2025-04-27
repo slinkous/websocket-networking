@@ -1,8 +1,12 @@
 'use strict';
 
+const { Logger } = require('ranvier');
+
 module.exports = {
   listeners: {
     attributeUpdate: state => function () {
+      Logger.warn("Calling listener attributeUpdate");
+      Logger.warn(this);
       updateAttributes.call(this);
     },
 
@@ -13,6 +17,12 @@ module.exports = {
       this.socket.command('sendData', 'effects', effects);
 
       updateAttributes.call(this);
+    },
+
+    move: state => function () {
+      // this.socket.command('sendData', 'quests', this.questTracker.serialize().active);
+
+      updateLocation.call(this);
     },
 
     combatantAdded: state => function () {
@@ -69,7 +79,17 @@ function updateAttributes() {
   this.socket.command('sendData', 'attributes', attributes);
 }
 
+function updateLocation() {
+  Logger.log("Updating location")
+  Logger.log(this.room.name)
+  this.socket.command('sendData', 'room', {
+    id: this.room.id,
+    data: this.room
+  })
+}
+
 function updateTargets() {
+  Logger.log("update targets");
   this.socket.command('sendData', 'targets', [...this.combatants].map(target => ({
     name: target.name,
     health: {
